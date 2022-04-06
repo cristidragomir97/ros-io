@@ -1,28 +1,110 @@
-import json, sys, os, shutil
-from core.utils import *
-import subprocess
+import json, sys, os, shutil 
+from jsonschema import Draft7Validator
+from colorama import Fore
+
 from git import Repo
 
+schema = {
+    "file" :{
+        "type" : "object",
+        "properties" : {
+            "name" : {"type" : "string"},
+            "desc" : {"type" : "string"},
+            "components": {"type" : "object"}
+        },
+    },
+
+    "simple_component" : {
+        "type" : "object",
+        "properties": {
+                "role" : {"type": "string"},
+                "topic" : {"type": "string"},
+                "repo" : {"type": "string"},
+                "library" : {"type": "string"},
+                "address" : {"type": "string"},
+                "args": {"type" : "object"}
+        }, 
+        "required": ["role", "topic", "repo", "library", "address"]
+    }, 
+
+    "multi_componment" : {
+        "type" : "object",
+        "properties": {
+                "repo" : {"type": "string"},
+                "library" : {"type": "string"},
+                "address" : {"type": "string"},
+                "channel_no": {"type": "number"},
+                "channels": {"type" : "object"},
+                "args": {"type" : "object"},
+            }, 
+            "required": ["repo", "library", "address",  "channel_no", "channels"]
+    },
+
+    "channel":{
+        "type" : "object",
+        "properties": {
+            "role" : {"type" : "string"},
+            "topic": {"type" : "string"},
+            "channel": {"type" : "string"},
+            "args": {"type" : "object"}
+        },
+        "required": ["role", "topic", "channel"]
+    }
+}
+
+def _validate(data, schema, name, tabs):
+        validator = Draft7Validator(schema)
+        raw_errors = validator.iter_errors(data)
+        err = list(raw_errors)
+
+        prefix = ""
+        for i in range(tabs):
+            prefix += "\t"
+
+
+        if len(err) == 0:
+            prefix += "* "
+            print(prefix + "{}:{} check {}".format(name, Fore.GREEN,  Fore.RESET))
+            return True
+
+        else: 
+           
+            print(prefix + "* {}:".format(name))
+            for error in err:
+                print(prefix + "\t {}{}{}".format(Fore.RED, error.message, Fore.RESET,))
+
+            return False
 
 class Channel():
-    def __init__(self):
+    def __init__(self, obj, name):
         self.name = name
-        self.role = role
-        self.pin = pin
-        self.topic = topic
-        self.args = args
+        self.role = obj["role"]
+        self.channel = obj["channel"]
+        self.topic = obj["topic"]
+        self.args = obj["args"]
 
+    def __str__(self):
+        return "pin: {} \n\t\t * name: {} \n\t\t * role:{} \n\t\t * topic:{} \n\t\t * args: {} \n\t\t ".format(self.channel, self.name, self.role, self.topic, self.args)
 
-class Device():
+class Component():
 
-    def handle_channel(self, obj, item):
-        _name = obj["channels"][item]["name"]
-        _role = obj["channels"][item]["role"]
-        _pin = obj["channels"][item]["channel"]
-        _topic = obj["channels"][item]["topic"]
-        _args = obj["channels"][item]["args"]
-        channel_obj = Channel(_name, _role, _pin, _topic, _args)
-        self.channels.append(channel_obj)
+    def __init__(self, obj, name, multichannel=False):
+            self.multichannel = multichannel
+            self.name = name
+            self.args = obj["args"]
+            self.library = obj["library"]
+            self.repo = obj["repo"]
+
+            self.clone_repo()
+
+            if multichannel: 
+                self.channel_no = obj["channel_no"]
+                self.channels = []
+            else:  
+                self.role = obj["role"]
+                self.topic = obj["topic"]
+                self.repo = obj["repo"]
+                self.address = obj["address"]
 
     def clone_repo(self):
         folder = "./library/{}".format(self.name)
@@ -30,84 +112,66 @@ class Device():
             shutil.rmtree(folder)
             print(os.path.realpath(folder))
             Repo.clone_from(self.repo, folder)
-        
-    def __init__(self, obj):
-        
-        self.name = obj["name"]
-        self.library = obj["library"]
-        self.args = obj["args"]
-        self.repo = obj["repo"]
-        self.channels = []
 
-        try:
-            # check if we are dealing with a 
-            if ("channel_no" in obj):
-                self.channel_no = int(obj["channel_no"])
-
-                for ch in range(0, self.channel_no):
-                    self.handle_channel(obj, ch)
-
-            else:
-                self.channel_no = 0
-                self.role = obj["role"]
-                self.topic = obj["topic"]  
-    
-            self.clone_repo()
-
-        except KeyError as k:
-            formatted = json.dumps(obj, indent=4)   
-            logg(__name__, "ERROR", "Can't load device. Field {} is missing.\n{}\n  ".format(k, formatted))
-
-    def get_channel(self, n):
-        return self.channels[n]
-
+    def __str__(self):
+        if self.multichannel:
+            return "[{}] \n\t * library: {} \n\t * repository: {} \n\t * arguments: {} \n\t * channels: ".format(self.name, self.library, self.repo, self.args)
+        else: 
+            return "[{}] \n\t * library: {} \n\t * repository: {} \n\t * role: {} \n\t * topic: {} \n\t * arguments: {} ".format(self.name, self.library,  self.repo, self.role, self.topic, self.args)
 
 class Config():
 
-    def __init__(self,  _file):
-        with open(_file) as f:
-            self.contents = json.load(f)[0]
-            logg(__name__, "INFO", "loading configuration file: {}".format(_file))
-            _, self.dev  = self.parse(self.contents)
-            print(_, self.dev)
-           
+    def __init__(self, path):
+        self.components = []
+        with open(path, 'r') as f:
+            self.instance = json.load(f)
+
+            # VALIDATE THE FILE STRUCTURE
+            if _validate(self.instance, schema["file"], "file", tabs=0) is True:
+                self.validate_components()
     
-    def parse(self, contents):
-        err = []
-        dev = []
-
-        try:
-    
-                components = contents["components"]
-                for element in components:
-                    dev.append(Device(element))
-                
-                print(dev)
-
-
-        except Exception as e :
-            logg(__name__, "WARNING","Can't load configuration item - field {} is missing ".format(e))
-
-            err.append(
-                json.dumps(e,
-                    default = lambda o: o.__dict__,
-                    sort_keys = True,
-                    indent = 4)
-            )
-
-        return err, dev
-
     def pretty_print(self):
+        for item in config.components:
+            print(item)
 
-        for dev in self.dev:
+            if item.multichannel:
+                for channel in item.channels:
+                    print("\t\t *", channel)
+
+
+
+    def validate_components(self):
+        componentz = self.instance["components"]
+
+        # ITERATE TROUGH ALL COMPONENTS IN THE CONFIG FILE
+        for item in componentz:
+            thing = componentz[item]
+
             
-            if dev.channel_no > 0:
-                logg(__name__, "INFO", "[DEVICE]: {}, {}, {}".format(dev.name, dev.library, dev.args))
+            ## HANDLE MULTI CHANNEL COMPONENT 
+            if "channel_no" in thing:
+                
+                # CREATE COMPONENT OBJECT
+                component_obj = Component(obj = thing, name = item, multichannel = True)
+    
+                if _validate(thing, schema["multi_componment"], item, tabs = 1) is True:
+                    ch = thing["channels"]
 
-                for channel in dev.channels:
-                    logg(__name__, "INFO", "[CHANNEL{}][{}, {}, {}".format(channel.pin, channel.name, channel.role, channel.topic))
+                    for channel in ch:
+                        if _validate(ch[channel], schema["channel"], channel, tabs = 2) is True:
+
+                            # CREATE CHANNEL OBJECT AND ADD TO THE COMPONENT OBJECT
+                            channel_obj = Channel(obj = ch[channel], name = channel)
+                            component_obj.channels.append(channel_obj)
+                
+                self.components.append(component_obj)
+
+            ## HANDLE SINGLE CHANNEL COMPONENT 
             else:
-                logg(__name__, "INFO", "[DEVICE]: {}, {}, {}, {}, {}".format(dev.name, dev.library, dev.role, dev.topic, dev.args))
-
-    def get_devices(self):
-        return self.dev
+                if _validate(thing, schema["simple_component"], item, tabs = 1) is True:
+                    ## create compoent here
+                    component_obj = Component(obj = thing, name = item, multichannel = False)
+                    self.components.append(component_obj)
+                    
+    def get_components(self):
+        return self.components
