@@ -2,7 +2,7 @@
 
 a balena-block that creates a ROS representation of the stuff your machine is made of. Components that are coneected to SBCs via I2C, UART, and GPIO and USB.  
 --- 
-In a world where ICs, modules and electronics are going trough long waiting times this provides robotics fleet owners to replace the hardware faster and deploy fleets with mixed hardware configurations while keeping the upper and more important layers away from all the variablity. 
+In a world where ICs, modules and electronics are going trough long waiting times this provides robotics fleet owners the flexiblity to replace the hardware faster and deploy fleets with mixed hardware configurations while keeping the upper and more important layers away from all the variablity. 
 
 ## config.json
 I've done a major update to the way the configuration file gets handled, mainly adding a schema-based validator instead of nested error handling.
