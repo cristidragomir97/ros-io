@@ -1,12 +1,12 @@
 # robot-guts 
-this is a block that together with ros-core abstracts away hardware components that can be used with ROS to the point of refering to them simply as guts. 
-These can be . Mainly anything that you connect to an SBC via I2C, UART, and GPIO. 
+this is a block that together with ros-core abstracts away hardware components and creates a ROS representation of 
+These can be anything that you connect to an SBC via I2C, UART, and GPIO. 
 
-
+In a world where ICs, modules and electronics are going trough rough market times this provides robotics fleet owners to replace the hardware faster and deploy fleets with mixed hardware configuration while keeping the upper and more important layers away from all the variablity. 
 ---
-## Configuration
-I've done a major update to the way the configuration file gets handled, mainly adding a schema-based validator instead of nested error handling. This makes everything way more robust but also requires modifications. 
-This solves many of the problems that kept out the joy of working on this project for a while. Will update this later with a proper guide, but for now, here's the schema. 
+## config.json
+I've done a major update to the way the configuration file gets handled, mainly adding a schema-based validator instead of nested error handling.
+I didn't have time to update documentation yet, but here is the schema used to validate the file: 
 
    "file" :{
         "type" : "object",
@@ -56,7 +56,8 @@ This solves many of the problems that kept out the joy of working on this projec
 }
 
 ## Supported modules
-Again, this project went through major brain surgery. Oh and I also need to add the same schema based mechanism to the packags at https://github.com/cristidragomir97/robot-block-lib
+I also need to add the same schema based mechanism to the packags at https://github.com/cristidragomir97/robot-block-lib and the way. 
+Currently tested only with motorhead. d
 
 * **Motor Drivers**: 
     * L298N GPIO (and any other motor controllers using PWM + DIR pins, eg. VNH3SP30)
