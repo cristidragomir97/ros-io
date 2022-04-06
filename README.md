@@ -1,7 +1,7 @@
 # robot-guts 
 
 a balena-block that together with ros-core abstracts away hardware components and creates a ROS representation of the stuff your machine is made of. The components I'm talking about are stuff you can connect to an SBC via I2C, UART, and GPIO. 
-In a world where ICs, modules and electronics are going trough rough market times this provides robotics fleet owners to replace the hardware faster and deploy fleets with mixed hardware configuration while keeping the upper and more important layers away from all the variablity. 
+In a world where ICs, modules and electronics are going trough long waiting times this provides robotics fleet owners to replace the hardware faster and deploy fleets with mixed hardware configurations while keeping the upper and more important layers away from all the variablity. 
 
 ---
 ## config.json
@@ -57,7 +57,7 @@ I didn't have time to update documentation yet, but here is the schema used to v
 
 ## Supported modules
 I also need to add the same schema based mechanism to the packags at https://github.com/cristidragomir97/robot-block-lib and the way. 
-Currently tested only with motorhead. d
+Currently tested only with motorhead. 
 
 * **Motor Drivers**: 
     * L298N GPIO (and any other motor controllers using PWM + DIR pins, eg. VNH3SP30)
