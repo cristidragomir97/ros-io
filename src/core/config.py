@@ -14,7 +14,7 @@ schema = {
         },
     },
 
-    "simple_component" : {
+    "simple_guts" : {
         "type" : "object",
         "properties": {
                 "role" : {"type": "string"},
@@ -27,7 +27,7 @@ schema = {
         "required": ["role", "topic", "repo", "library", "address"]
     }, 
 
-    "multi_componment" : {
+    "complex_guts" : {
         "type" : "object",
         "properties": {
                 "repo" : {"type": "string"},
@@ -154,7 +154,7 @@ class Config():
                 # CREATE COMPONENT OBJECT
                 component_obj = Component(obj = thing, name = item, multichannel = True)
     
-                if _validate(thing, schema["multi_componment"], item, tabs = 1) is True:
+                if _validate(thing, schema["complex_guts"], item, tabs = 1) is True:
                     ch = thing["channels"]
 
                     for channel in ch:
@@ -168,7 +168,7 @@ class Config():
 
             ## HANDLE SINGLE CHANNEL COMPONENT 
             else:
-                if _validate(thing, schema["simple_component"], item, tabs = 1) is True:
+                if _validate(thing, schema["simple_guts"], item, tabs = 1) is True:
                     ## create compoent here
                     component_obj = Component(obj = thing, name = item, multichannel = False)
                     self.components.append(component_obj)
