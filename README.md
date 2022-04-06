@@ -1,8 +1,8 @@
 # robot-guts 
-this is a block that together with ros-core abstracts away hardware components and creates a ROS representation of 
-These can be anything that you connect to an SBC via I2C, UART, and GPIO. 
 
+a balena-block that together with ros-core abstracts away hardware components and creates a ROS representation of the stuff your machine is made of. The components I'm talking about are stuff you can connect to an SBC via I2C, UART, and GPIO. 
 In a world where ICs, modules and electronics are going trough rough market times this provides robotics fleet owners to replace the hardware faster and deploy fleets with mixed hardware configuration while keeping the upper and more important layers away from all the variablity. 
+
 ---
 ## config.json
 I've done a major update to the way the configuration file gets handled, mainly adding a schema-based validator instead of nested error handling.
