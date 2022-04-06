@@ -1,0 +1,4 @@
+RPi.GPIO==0.7.0
+smbus2==0.4.1
+colorama==0.3.9
+GitPython==3.1.8
