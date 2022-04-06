@@ -1,6 +1,6 @@
 # robot-guts 
 
-a balena-block that together with ros-core abstracts away hardware components and creates a ROS representation of the stuff your machine is made of. The components I'm talking about are stuff you can connect to an SBC via I2C, UART, and GPIO. 
+a balena-block that creates a ROS representation of the stuff your machine is made of. Components that are coneected to SBCs via I2C, UART, and GPIO and USB.  
 --- 
 In a world where ICs, modules and electronics are going trough long waiting times this provides robotics fleet owners to replace the hardware faster and deploy fleets with mixed hardware configurations while keeping the upper and more important layers away from all the variablity. 
 
