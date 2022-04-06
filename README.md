@@ -1,15 +1,67 @@
-# Robot Block 
-# is a hardware abstraction layer for I2C, UART and GPIO modules for the Raspberry Pi Eosystem
-# It creates all the required ROS handlers for your hardware based on a configuration file. 
-# Long story short it's docker-compose for hardware, 
+# robot-guts 
+this is a block that together with ros-core abstracts away hardware components that can be used with ROS to the point of refering to them simply as guts. 
+These can be . Mainly anything that you connect to an SBC via I2C, UART, and GPIO. 
 
 
 ---
+## Configuration
+I've done a major update to the way the configuration file gets handled, mainly adding a schema-based validator instead of nested error handling. This makes everything way more robust but also requires modifications. 
+This solves many of the problems that kept out the joy of working on this project for a while. Will update this later with a proper guide, but for now, here's the schema. 
+
+"file" :{
+        "type" : "object",
+        "properties" : {
+            "name" : {"type" : "string"},
+            "desc" : {"type" : "string"},
+            "guts: {"type" : "object"}
+        },
+    },
+
+    "simple_guts" : {
+        "type" : "object",
+        "properties": {
+                "role" : {"type": "string"},
+                "topic" : {"type": "string"},
+                "repo" : {"type": "string"},
+                "library" : {"type": "string"},
+                "address" : {"type": "string"},
+                "args": {"type" : "object"}
+        }, 
+        "required": ["role", "topic", "repo", "library", "address"]
+    }, 
+
+    "complex_guts" : {
+        "type" : "object",
+        "properties": {
+                "repo" : {"type": "string"},
+                "library" : {"type": "string"},
+                "address" : {"type": "string"},
+                "channel_no": {"type": "number"},
+                "channels": {"type" : "object"},
+                "args": {"type" : "object"},
+            }, 
+            "required": ["repo", "library", "address",  "channel_no", "channels"]
+    },
+
+    "channel":{
+        "type" : "object",
+        "properties": {
+            "role" : {"type" : "string"},
+            "topic": {"type" : "string"},
+            "channel": {"type" : "string"},
+            "args": {"type" : "object"}
+        },
+        "required": ["role", "topic", "channel"]
+    }
+}
+
 ## Supported modules
+Again, this project went through major brain surgery. Oh and I also need to add the same schema based mechanism to the packags at https://github.com/cristidragomir97/robot-block-lib
+
 * **Motor Drivers**: 
     * L298N GPIO (and any other motor controllers using PWM + DIR pins, eg. VNH3SP30)
     * Sparkfun Qwiic Motor Controler
-    * Motorhead
+    * Motorhead (here)[https://github.com/cristidragomir97/motorhead]
 * **Encoders**: 
     * Quadrature Encoders (GPIO)
 * **Sensors**: 
@@ -20,7 +72,6 @@
         * VL53L1
         * SR04
     * **IMUs:**
-        * BNO055
         * LSM9DS1
         * MPU6050
 * **Actuators**
@@ -29,146 +80,3 @@
     * **Servo**:
         * Jetson GPIO (hardware PWM on pin 32, 32)
         * PCA9865 I2C Servos
-
-
----
-## Example Config for balenaBot
-``` json
-[{
-    "name": "balenabot_mini", 
-    "desc": "Low-cost robot based around Sparkfun Auto pHAT",
-    "components":{
-
-        "interface": [
-            {   
-                "library":"PCA9685",
-                "signal":"PWM",
-                "address": "0x7f",
-                "channels": [0, 1, 2, 3]
-            },
-            {
-                "library":"ADS1115",
-                "signal":"ADC",
-                "address": "0x7f",
-                "channels": [0, 1, 2, 3]
-            }
-        ],
-
-        "actuators": [
-            {   "type": "servo",
-                "role": "service",
-                "topic": "/camera_servo",
-                "library": "I2CPWM",
-                "address": "PCA/0",
-                "args":{}
-            }, 
-            {
-                "type": "driver",
-                "role": "subscriber",
-                "topic": "/cmd/vel",
-                "library": "SCMD",
-                "address": "0x5d", 
-                "args":{
-                    "flip": "true",
-                    "radius": 0.0325 
-                }
-            }
-        ],
-
-        "sensors": [
-            {
-                "type": "ranging",
-                "library": "VL53L1",
-                "role": "publisher",
-                "topic": "/range/center", 
-                "address": "0x29",
-                "args":{}
-            }, 
-            {
-                "type": "ranging",
-                "library": "VL53L1",
-                "role": "publisher",
-                "topic": "/range/left",
-                "address": "0x31",
-                "args":{}
-                
-            }, 
-            {
-                "type": "ranging",
-                "library": "VL53L1",
-                "role": "publisher",
-                "topic": "/range/right", 
-                "address": "0x32",
-                "args":{}
-            },
-            {
-                "type": "motion",
-                "topic": "/imu/raw",
-                "role": "publisher",
-                "library":"LSM9DS1",
-                "address": ["0x1e", "0x6b"],
-                "args":{
-                    "publish_tf": true
-                }
-                
-            },
-            {
-                "type": "power",
-                "library":"INA219",
-                "role": "publisher",
-                "topic": "/power/motors",
-                "address": "0x40",
-                "args":{}
-            }
-        ],
-
-        "external":[
-            {
-                "name": "camera",
-                "role": "external",
-                "source": "~/catkin_ws/realsense-ros",
-                "build": "false",
-                "command": "roslaunch",
-                "package": "realsense2_camera",
-                "file": "rs_camera.launch",
-                "args": {
-                    "color_width": "640",
-                    "color_height": "480",
-                    "color_fps": "15",
-                    "depth_width": "640",
-                    "depth_height": "480",
-                    "depth_fps": "15"
-                }
-            },
-            {
-                "name": "rplidar",
-                "role": "external",
-                "source": "~/catkin_ws/rpilidar_ros",
-                "build": "false",
-                "command": "roslaunch",
-                "package": "rplidar_ros",
-                "file": "rpildar.launch",
-                "args": {}
-            },
-            {
-                "name":"imu_filter",
-                "role": "external",
-                "build": "false",
-                "source": "",
-                "command": "rosrun",
-                "package": "imu_complementary_filter",
-                "file": "complementary_filter_node",
-                "args": {
-                    "fixed_frame": "camera_link",
-                    "use_mag": "false",
-                    "do_bias_estimation": "true", 
-                    "do_adaptive_gain": "false", 
-                    "publish_tf": "true"
-                }
-            }
-        ]
-
-    }
-}]
-
-```
