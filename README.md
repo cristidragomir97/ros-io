@@ -8,7 +8,7 @@ These can be . Mainly anything that you connect to an SBC via I2C, UART, and GPI
 I've done a major update to the way the configuration file gets handled, mainly adding a schema-based validator instead of nested error handling. This makes everything way more robust but also requires modifications. 
 This solves many of the problems that kept out the joy of working on this project for a while. Will update this later with a proper guide, but for now, here's the schema. 
 
-"file" :{
+   "file" :{
         "type" : "object",
         "properties" : {
             "name" : {"type" : "string"},
