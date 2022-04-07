@@ -9,6 +9,7 @@ I've done a major update to the way the configuration file gets handled, mainly 
 I didn't have time to update documentation yet, but here is the schema used to validate the file: 
 
 ```json
+{
    "file" :{
         "type" : "object",
         "properties" : {
