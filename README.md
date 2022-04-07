@@ -14,7 +14,7 @@ I didn't have time to update documentation yet, but here is the schema used to v
         "properties" : {
             "name" : {"type" : "string"},
             "desc" : {"type" : "string"},
-            "guts: {"type" : "object"}
+            "guts": {"type" : "object"}
         },
     },
 
