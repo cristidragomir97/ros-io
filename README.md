@@ -60,17 +60,15 @@ I didn't have time to update documentation yet, but here is the schema used to v
 ```
 
 ## Supported parts
+
+### Core Library 
 | Name      | Type.  |Desc. 
 | ----------- | ----------- | ----------- | 
-| **ADS1015** | Interface | 4-channel 12-bit I2C ADC | 
-| **pi-gpio** | Interface | Raspberry Pi GPIO Wrapper | 
-| **VL53L1** | Range Sensor | ToF Sensor |
-| **VL53L1_Array** | Range  Sensor | Configurable array of ToF Sensors |
-| **ICM20948** | Motion Sensor | 9-Axis MEMS IMU  |
-| **LSM9DS1** | Motion Sensor | 6-Axis MEMS IMU |
-| **SparkfunTwist** | Sensor | Sparkfun Dual Encoder Reader |
-| **INA219** | Power Sensor | Voltage/Current/Power Sensor |
+| [**ADS1015**](https://github.com/cristidragomir97/robot-block-lib/tree/main/ADS1115) | Interface | 4-channel 12-bit I2C ADC | 
+| [**VL53L1_Array**](https://github.com/cristidragomir97/robot-block-lib/tree/main/VL53L1_Array) | Range  Sensor | Configurable array of ToF Sensors |
+| [**ICM20948**](https://github.com/cristidragomir97/robot-block-lib/tree/main/ICM20948) | Motion Sensor | 9-Axis MEMS IMU  |
+| [**LSM9DS1**](https://github.com/cristidragomir97/robot-block-lib/tree/main/LSM9DS1) | Motion Sensor | 6-Axis MEMS IMU |
+| [**SparkfunTwist**](https://github.com/cristidragomir97/robot-block-lib/tree/main/SparkfunTwist) | Sensor | Sparkfun Dual Encoder Reader |
+| [**INA219**](https://github.com/cristidragomir97/robot-block-lib/tree/main/INA219) | Power Sensor | Voltage/Current/Power Sensor |
 | [**4245-PSOC**](https://github.com/cristidragomir97/robot-block-lib/tree/main/4245-PSOC) | Motor Driver | Serial/I2C Motor Driver found in Sparkfun Auto pHat  
-
-## How to write a wrapper for a new part
 
