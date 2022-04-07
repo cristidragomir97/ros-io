@@ -59,29 +59,17 @@ I didn't have time to update documentation yet, but here is the schema used to v
 }
 ```
 
-## Supported modules
-I also need to add the same schema based mechanism to the packags at https://github.com/cristidragomir97/robot-block-lib and the way. 
-Currently tested only with motorhead. 
+## supported devices
+| Name      | Type.  |Desc. 
+| ----------- | ----------- | ----------- | 
+| **ADS1015** | Interface | 4-channel 12-bit I2C ADC | 
+| **pi-gpio** | Interface | Raspberry Pi GPIO Wrapper | 
+| **VL53L1** | Range Sensor | ToF Sensor |
+| **VL53L1_Array** | Range  Sensor | Configurable array of ToF Sensors |
+| **ICM20948** | Motion Sensor | 9-Axis MEMS IMU  |
+| **LSM9DS1** | Motion Sensor | 6-Axis MEMS IMU |
+| **SparkfunTwist** | Sensor | Sparkfun Dual Encoder Reader |
+| **INA219** | Power Sensor | Voltage/Current/Power Sensor |
+| **4245-PSOC** | Motor Driver | Serial/I2C Motor Driver found in Sparkfun Auto pHat  
 
-* **Motor Drivers**: 
-    * L298N GPIO (and any other motor controllers using PWM + DIR pins, eg. VNH3SP30)
-    * [Sparkfun Qwiic Motor Controler](https://github.com/cristidragomir97/robot-block-lib/tree/main/4245-PSOC)
-    * [Motorhead](https://github.com/cristidragomir97/motorhead)
-* **Encoders**: 
-    * [Sparkfun I2C Quadrature Encoders]((https://github.com/cristidragomir97/robot-block-lib/tree/main/SparkfunTwist)
-* **Sensors**: 
-    * **Basics:**
-        * [I2C ADC (ADS1115)](https://github.com/cristidragomir97/robot-block-lib/tree/main/ADS1115)
-    * **Ranging:**
-        * VL53L1
-        * VL53L1 Array
-    * **IMUs:**
-        * LSM9DS1
-        * MPU6050
-        * [ICM20948]
-* **Actuators**
-    * GPIO Output 
-    * GPIO PWM 
-    * **Servo**:
-        * Jetson GPIO (hardware PWM on pin 32, 32)
-        * PCA9865 I2C Servos
+## How to write your own 
