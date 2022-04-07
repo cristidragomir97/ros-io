@@ -1,4 +1,4 @@
-# robot-guts 
+# ros-io
 
 A hardware abstraction layer for modules and chips that are connected to I2C, UART and GPIO interfaces. This reduces friction by eliminating the need to write low-level code, firmware or ROS nodes and replaces it with a config file similar to the way docker-compose works. 
 
