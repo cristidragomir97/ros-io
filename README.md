@@ -8,6 +8,7 @@ In a world where ICs, modules and electronics are going trough long waiting time
 I've done a major update to the way the configuration file gets handled, mainly adding a schema-based validator instead of nested error handling.
 I didn't have time to update documentation yet, but here is the schema used to validate the file: 
 
+```json
    "file" :{
         "type" : "object",
         "properties" : {
@@ -54,6 +55,7 @@ I didn't have time to update documentation yet, but here is the schema used to v
         "required": ["role", "topic", "channel"]
     }
 }
+```
 
 ## Supported modules
 I also need to add the same schema based mechanism to the packags at https://github.com/cristidragomir97/robot-block-lib and the way. 
