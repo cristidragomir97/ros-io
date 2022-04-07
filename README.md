@@ -20,7 +20,7 @@ I didn't have time to update documentation yet, but here is the schema used to v
         },
     },
 
-    "simple_parts : {
+    "simple_parts" : {
         "type" : "object",
         "properties": {
                 "role" : {"type": "string"},
