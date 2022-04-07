@@ -72,4 +72,5 @@ I didn't have time to update documentation yet, but here is the schema used to v
 | **INA219** | Power Sensor | Voltage/Current/Power Sensor |
 | [**4245-PSOC**](https://github.com/cristidragomir97/robot-block-lib/tree/main/4245-PSOC) | Motor Driver | Serial/I2C Motor Driver found in Sparkfun Auto pHat  
 
-## How to write your own 
+## How to write a wrapper for a new part
+
