@@ -65,20 +65,20 @@ Currently tested only with motorhead.
 
 * **Motor Drivers**: 
     * L298N GPIO (and any other motor controllers using PWM + DIR pins, eg. VNH3SP30)
-    * Sparkfun Qwiic Motor Controler
-    * Motorhead (here)[https://github.com/cristidragomir97/motorhead]
+    * [Sparkfun Qwiic Motor Controler](https://github.com/cristidragomir97/robot-block-lib/tree/main/4245-PSOC)
+    * [Motorhead](https://github.com/cristidragomir97/motorhead)
 * **Encoders**: 
-    * Quadrature Encoders (GPIO)
+    * [Sparkfun I2C Quadrature Encoders]((https://github.com/cristidragomir97/robot-block-lib/tree/main/SparkfunTwist)
 * **Sensors**: 
     * **Basics:**
-        * GPIO Input 
-        * I2C ADC 
+        * [I2C ADC (ADS1115)](https://github.com/cristidragomir97/robot-block-lib/tree/main/ADS1115)
     * **Ranging:**
         * VL53L1
-        * SR04
+        * VL53L1 Array
     * **IMUs:**
         * LSM9DS1
         * MPU6050
+        * [ICM20948]
 * **Actuators**
     * GPIO Output 
     * GPIO PWM 
