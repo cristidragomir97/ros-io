@@ -16,11 +16,11 @@ I didn't have time to update documentation yet, but here is the schema used to v
         "properties" : {
             "name" : {"type" : "string"},
             "desc" : {"type" : "string"},
-            "guts": {"type" : "object"}
+            "parts": {"type" : "object"}
         },
     },
 
-    "simple_guts" : {
+    "simple_parts : {
         "type" : "object",
         "properties": {
                 "role" : {"type": "string"},
@@ -33,7 +33,7 @@ I didn't have time to update documentation yet, but here is the schema used to v
         "required": ["role", "topic", "repo", "library", "address"]
     }, 
 
-    "complex_guts" : {
+    "complex_parts" : {
         "type" : "object",
         "properties": {
                 "repo" : {"type": "string"},
@@ -59,7 +59,7 @@ I didn't have time to update documentation yet, but here is the schema used to v
 }
 ```
 
-## supported devices
+## Supported parts
 | Name      | Type.  |Desc. 
 | ----------- | ----------- | ----------- | 
 | **ADS1015** | Interface | 4-channel 12-bit I2C ADC | 
