@@ -72,3 +72,31 @@ I didn't have time to update documentation yet, but here is the schema used to v
 | [**INA219**](https://github.com/cristidragomir97/robot-block-lib/tree/main/INA219) | Power Sensor | Voltage/Current/Power Sensor |
 | [**4245-PSOC**](https://github.com/cristidragomir97/robot-block-lib/tree/main/4245-PSOC) | Motor Driver | Serial/I2C Motor Driver found in Sparkfun Auto pHat  
 
+### How to add packages for new parts
+
+You can basically write any valid python code as long as some conventions are followed. 
+Let's take ADS1015, a 4-channel Analog-Digital Converter as an example.
+
+1. Package folder must contain a JSON configuration file that defines it's properties, dependencies, ros message types and callback functions. All fields in this example are mandatory. We also take care of dependencies for your as long as you add them to your config. (currently only pip packages are supported)
+    
+    ```json
+    {
+    	"name":  "ADS1115",
+    	"info":  "4-channel 12-bit I2C ADC",
+    	"dependencies":  [
+    
+    		{
+    		"type":  "pip3",
+    		"package":"adafruit-circuitpython-ads1x15"
+    		}
+    
+    	],
+    	"callback":  ["read0","read1","read2","read3"],
+    	"ros_message":  ["std_msgs.msg",  "Int32"]
+    }
+    ```
+    
+2. For the dynamic imports to work, folder name, config file, python file and class constructor must all share the same name:
+ADS1015, ADS1015.json, ADS1015.py, `ADS1015(args)`
+3. devices with multiple channels must expose `read` and `update` callbacks for each channel: `["read0","read1","read2","read3"]`
+4. You can make use of the utility functions in robot-block as they get imported at runtime. Take a look at [utils.py](https://github.com/cristidragomir97/ros-io/blob/master/robot/src/core/utils.py)
