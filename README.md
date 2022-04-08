@@ -10,40 +10,48 @@ I've done a major update to the way the configuration file gets handled, mainly 
 I didn't have time to update documentation yet, but here is the schema used to validate the file: 
 
 ```json
-{
-   "file" :{
+    "file" :{
         "type" : "object",
         "properties" : {
             "name" : {"type" : "string"},
             "desc" : {"type" : "string"},
+            "downloads": {"type" : "object"},
             "parts": {"type" : "object"}
         },
     },
 
-    "simple_parts" : {
+    "downloads": {
+        "type" : "object",
+        "properties" : {
+            "repos" : {"type" : "array"},
+            "install_deps" : {"type" : "string"},
+        }
+    },
+
+    "single-channel" : {
         "type" : "object",
         "properties": {
                 "role" : {"type": "string"},
                 "topic" : {"type": "string"},
-                "repo" : {"type": "string"},
+                "folder" : {"type": "string"},
                 "library" : {"type": "string"},
                 "address" : {"type": "string"},
                 "args": {"type" : "object"}
         }, 
-        "required": ["role", "topic", "repo", "library", "address"]
+        "required": ["role", "topic", "library",  "folder", "address"]
     }, 
 
-    "complex_parts" : {
+    "multi-channel" : {
         "type" : "object",
         "properties": {
-                "repo" : {"type": "string"},
+                "folder" : {"type": "string"},
                 "library" : {"type": "string"},
                 "address" : {"type": "string"},
                 "channel_no": {"type": "number"},
                 "channels": {"type" : "object"},
                 "args": {"type" : "object"},
             }, 
-            "required": ["repo", "library", "address",  "channel_no", "channels"]
+            "required": ["library", "folder", "address",  "channel_no", "channels"]
     },
 
     "channel":{
@@ -51,12 +59,11 @@ I didn't have time to update documentation yet, but here is the schema used to v
         "properties": {
             "role" : {"type" : "string"},
             "topic": {"type" : "string"},
-            "channel": {"type" : "string"},
+            "pin": {"type" : "string"},
             "args": {"type" : "object"}
         },
-        "required": ["role", "topic", "channel"]
+        "required": ["role", "topic", "pin"]
     }
-}
 ```
 
 ## Supported parts
