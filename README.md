@@ -1,7 +1,14 @@
+<<<<<<< Updated upstream
 # ros-io
+=======
+# robot-guts 
+this is a block that together with ros-core abstracts away hardware components that can be used with ROS to the point of refering to them simply as guts. 
+These can be . Mainly anything that you connect to an SBC via I2C, UART, and GPIO. 
+>>>>>>> Stashed changes
 
 A hardware abstraction layer for modules and chips that are connected to I2C, UART and GPIO interfaces. This reduces friction by eliminating the need to write low-level code, firmware or ROS nodes and replaces it with a config file similar to the way docker-compose works. 
 
+<<<<<<< Updated upstream
 --- 
 In a world where ICs, modules and electronics are going trough long waiting times this provides robotics fleet owners the flexiblity to replace the hardware faster and deploy fleets with mixed hardware configurations while keeping the upper and more important layers away from all the variablity. 
 
@@ -11,10 +18,19 @@ I didn't have time to update documentation yet, but here is the schema used to v
 
 ```json
     "file" :{
+=======
+---
+## Configuration
+I've done a major update to the way the configuration file gets handled, mainly adding a schema-based validator instead of nested error handling. This makes everything way more robust but also requires modifications. 
+This solves many of the problems that kept out the joy of working on this project for a while. Will update this later with a proper guide, but for now, here's the schema. 
+
+"file" :{
+>>>>>>> Stashed changes
         "type" : "object",
         "properties" : {
             "name" : {"type" : "string"},
             "desc" : {"type" : "string"},
+<<<<<<< Updated upstream
             "downloads": {"type" : "object"},
             "parts": {"type" : "object"}
         },
@@ -29,15 +45,27 @@ I didn't have time to update documentation yet, but here is the schema used to v
     },
 
     "single-channel" : {
+=======
+            "guts: {"type" : "object"}
+        },
+    },
+
+    "simple_guts" : {
+>>>>>>> Stashed changes
         "type" : "object",
         "properties": {
                 "role" : {"type": "string"},
                 "topic" : {"type": "string"},
+<<<<<<< Updated upstream
                 "folder" : {"type": "string"},
+=======
+                "repo" : {"type": "string"},
+>>>>>>> Stashed changes
                 "library" : {"type": "string"},
                 "address" : {"type": "string"},
                 "args": {"type" : "object"}
         }, 
+<<<<<<< Updated upstream
         "required": ["role", "topic", "library",  "folder", "address"]
     }, 
 
@@ -45,13 +73,26 @@ I didn't have time to update documentation yet, but here is the schema used to v
         "type" : "object",
         "properties": {
                 "folder" : {"type": "string"},
+=======
+        "required": ["role", "topic", "repo", "library", "address"]
+    }, 
+
+    "complex_guts" : {
+        "type" : "object",
+        "properties": {
+                "repo" : {"type": "string"},
+>>>>>>> Stashed changes
                 "library" : {"type": "string"},
                 "address" : {"type": "string"},
                 "channel_no": {"type": "number"},
                 "channels": {"type" : "object"},
                 "args": {"type" : "object"},
             }, 
+<<<<<<< Updated upstream
             "required": ["library", "folder", "address",  "channel_no", "channels"]
+=======
+            "required": ["repo", "library", "address",  "channel_no", "channels"]
+>>>>>>> Stashed changes
     },
 
     "channel":{
@@ -59,6 +100,7 @@ I didn't have time to update documentation yet, but here is the schema used to v
         "properties": {
             "role" : {"type" : "string"},
             "topic": {"type" : "string"},
+<<<<<<< Updated upstream
             "pin": {"type" : "string"},
             "args": {"type" : "object"}
         },
@@ -107,3 +149,37 @@ Let's take ADS1015, a 4-channel Analog-Digital Converter as an example.
 ADS1015, ADS1015.json, ADS1015.py, `ADS1015(args)`
 3. devices with multiple channels must expose `read` and `update` callbacks for each channel: `["read0","read1","read2","read3"]`
 4. You can make use of the utility functions in robot-block as they get imported at runtime. Take a look at [utils.py](https://github.com/cristidragomir97/ros-io/blob/master/robot/src/core/utils.py)
+=======
+            "channel": {"type" : "string"},
+            "args": {"type" : "object"}
+        },
+        "required": ["role", "topic", "channel"]
+    }
+}
+
+## Supported modules
+Again, this project went through major brain surgery. Oh and I also need to add the same schema based mechanism to the packags at https://github.com/cristidragomir97/robot-block-lib
+
+* **Motor Drivers**: 
+    * L298N GPIO (and any other motor controllers using PWM + DIR pins, eg. VNH3SP30)
+    * Sparkfun Qwiic Motor Controler
+    * Motorhead (here)[https://github.com/cristidragomir97/motorhead]
+* **Encoders**: 
+    * Quadrature Encoders (GPIO)
+* **Sensors**: 
+    * **Basics:**
+        * GPIO Input 
+        * I2C ADC 
+    * **Ranging:**
+        * VL53L1
+        * SR04
+    * **IMUs:**
+        * LSM9DS1
+        * MPU6050
+* **Actuators**
+    * GPIO Output 
+    * GPIO PWM 
+    * **Servo**:
+        * Jetson GPIO (hardware PWM on pin 32, 32)
+        * PCA9865 I2C Servos
+>>>>>>> Stashed changes

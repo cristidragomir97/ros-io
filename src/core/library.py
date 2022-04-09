@@ -1,8 +1,8 @@
-import rospy, os, json, importlib, sys, subprocess
 
+import pkg_resources, subprocess, sys, os, json
+from git import Repo
+from colorama import Fore 
 from core.utils import *
-
-
 
 class Package():
         def __init__(self, name, file):
@@ -15,78 +15,77 @@ class Package():
                     self.dependencies = contents["dependencies"]
                     self.callback = contents["callback"]
                     self.ros_message = contents["ros_message"]
-                    self.valid = True
-                
-                    for dep in self.dependencies:
-                        if dep["type"] == "pip3":
-                            pck = dep["package"]
-                            # check if package is installed first 
-                            if not self.is_installed(pck):
-                                self.install(pck)
-
-              
-
+                    
                 except Exception as e:
                     logg(__name__, "ERROR", "Can't load {} - field is missing ".format(e))
-                    self.valid = False
-                    
-    
-        def install(self, package):
-            subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
-        def is_installed(self, name):
-            import pkg_resources 
-            installed_packages_list = sorted(["%s" % (i.key) for i in pkg_resources.working_set])
-            return name in installed_packages_list
+        def __str__(self) -> str:
+            return "* {} \n\t * info: {} \n\t * dependencies: {} \n\t * callback: {} \n\t * ros_message: {} \n\t * python: {} ".format(self.name, self.info, self.dependencies, self.callback, self.ros_message, self.python)
 
-        def is_valid(self):
-            return self.valid
 
-                
 class Library():
-    def __init__(self):
-        self.packages = dict()
+    def clone_repos(self):
+        for item in self.config.downloads.repos:
+            repo = item[0]
+            folder =  os.path.realpath(item[1])
 
+            if not os.path.exists(folder):
+                print("cloning {} to {}".format(repo, folder))
+                Repo.clone_from(repo, folder)
+            else:
+                print("{} already exists, skipping".format(folder))
+
+    def load_packages(self):
         library_dir = os.path.realpath('./library')
-    
         library_folders = [f.path  for f in os.scandir(library_dir) if f.is_dir()]
-
-        print("Library dir:", library_dir, "Library folders:", library_folders)
 
         for full_path in library_folders:
             name = full_path.split("/").pop()
-            json_filename = full_path + '/{}.json'.format(name)
-            python_filename = full_path + '/{}.py'.format(name)
+            file = full_path + '/{}.json'.format(name)
 
-            print(json_filename, python_filename)
+            if os.path.isfile(file):
+                self.install_pip(file)
+                self.packages[name] = Package(name, file)
 
-            if os.path.exists(python_filename):
-                if os.path.exists(json_filename):
-                    print(name, json_filename, python_filename)
-                    pack = Package(name, json_filename)
-
-                    if pack.is_valid():
-                        self.packages[name] = pack
-                        logg(__name__, "INFO", "{} loaded  from {}".format(name, json_filename))
-                    else:
-                        logg(__name__, "ERROR", "{} is not valid".format(name))
-                else:
-                    logg(__name__, "WARNING", "Python file for {} missing, skipping package !".format(name))
             else:
-                logg(__name__, "WARNING", "JSON file for {} missing, skipping package !".format(name))
+                deeper_folders = [f.path  for f in os.scandir(full_path) if f.is_dir()]
+                for deeper_folder in deeper_folders:
+                    name = deeper_folder.split("/").pop()
 
+                    if name != ".git":
+                        json_filename = deeper_folder + '/{}.json'.format(name)
+                        self.packages[name] = Package(name, json_filename)
+                        self.install_pip(json_filename)
 
-    def pretty_print(self):
-        logg(__name__, "INFO", "PACKAGES")
-
-        for package in self.packages: 
-            p = self.packages[package]
-            logg(__name__, "INFO", "{} - {} ".format(p.name, p.info))
+    def install_pip(self, json_file):
+        with open(json_file) as json_file:
+            data = json.load(json_file)
+            for dep in data["dependencies"]:
+                if dep["type"] == "pip3":
+                    pck = dep["package"]
     
+                    if not self.is_installed(pck):
+                        subprocess.check_call([sys.executable, "-m", "pip", "install", pck])
+
+    def is_installed(self, name):
+        return name in sorted(["%s" % (i.key) for i in pkg_resources.working_set])
+
+    def __init__(self, config):
+        self.packages = {}
+
+        self.config = config
+        self.clone_repos()
+        self.load_packages()
+
+        print("{} PACKAGES: \n ---------------------- \n {}".format(Fore.GREEN, Fore.RESET))
+        for package in self.packages:
+            print(self.packages[package])
+
 
     def has_package(self, package):
         return package in self.packages
     
     def get_package(self, package):
-        print(self.packages, package)
+        print(package, self.packages)
         return self.packages[package]
+    

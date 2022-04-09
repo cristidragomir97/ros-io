@@ -5,18 +5,17 @@ from core.config import Config
 from core.factory import Factory 
 from core.utils import *
 
-    
-if __name__ == "__main__":
-    print('I2C BUS:', scan_bus())
+def arg_parse():
     parser = argparse.ArgumentParser()
     parser.add_argument("--config")
     args =  parser.parse_args()
-    conf = os.getcwd() + "/" + args.config
-    rospy.init_node("robotblock", disable_signals=True)
+    return os.getcwd() + "/" + args.config
 
-    lib = Library()
+    
+if __name__ == "__main__":
+    rospy.init_node("ros-io", disable_signals=True)
+
+    conf = arg_parse()
     config = Config(conf)
-    time.sleep(2)
-
-
+    lib = Library(config)
     Factory(library=lib, config=config)

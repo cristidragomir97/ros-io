@@ -1,13 +1,22 @@
 {
     "name": "sudo", 
     "desc": "kitchen sink included",
-    "components": {
-            "motor_driver": {   
+
+    "downloads":{
+        "repos":[
+            ["https://github.com/cristidragomir97/motorhead", "./library/motorhead"],
+            ["https://github.com/cristidragomir97/robot-block-lib", "./library/core-lib"]
+        ],
+        "install_deps": "True"
+    },
+
+    "parts": {
+        "motor_driver": {   
                 "role": "subscriber",
                 "topic": "/cmd_vel",
-                "repo": "https://github.com/cristidragomir97/motorhead",
+                "folder": "/motorhead",
                 "library": "motorhead",
-                "address": "0x5d", 
+                "address": "0x76", 
                 "args":{
                     "radius": 0.0325,
                     "flip": "true",
@@ -15,50 +24,52 @@
                         "right_a": 4, 
                         "right_b": 5,
                         "right_pwm": 3,
-                        "right_enc_a": 10,
-                        "right_enc_b": 11,
                         "left_a": 7,
                         "left_b": 8,
                         "left_pwm": 6,
+                        "right_enc_a": 10,
+                        "right_enc_b": 11,
                         "left_enc_a": 12,
                         "left_enc_b": 13
                     }
                 }
-            },
-            "ADC": {   
-                "repo": "https://github.com/cristidragomir97/ADS1115",
-                "library": "ADS1115",
-                "address": "0x29",
-                "channel_no": 4, 
-                "channels":{
-                    "front_floor_right": {   
-                        "channel": "0",
-                        "role": "publisher",
-                        "topic": "/floor/front_right", 
-                        "args":{}
-                    },
-                    "front_left_floor": {  
-                        "channel": "1", 
-                        "role": "publisher",
-                        "topic": "/floor/front_left", 
-                        "args":{}
-                    },
-                    "right_floor": {   
-                        "channel": "2",
-                        "rolde": "publisher",
-                        "topdic": "/floor/right", 
-                        "args":{}
-                    },
-                    "left_floor": {   
-                        "channel": "3",
-                        "role": "publisher",
-                        "topic": "/floor/left", 
-                        "args":{}
-                    }
-                }, 
-                "args":{   
+        },
+         
+        "ADC": {   
+            "folder": "core-lib/ADS1115",
+            "library": "ADS1115",
+            "address": "0x48",
+            "channel_no": 4, 
+            "channels":{
+                "front_floor_right": {   
+                    "pin": "0",
+                    "role": "publisher",
+                    "topic": "/floor/front_right", 
+                    "args":{}
+                },
+                "front_left_floor": {  
+                    "pin": "1",
+                    "role": "publisher",
+                    "topic": "/floor/front_left", 
+                    "args":{}
+                },
+                "right_floor": {   
+                    "pin": "2",
+                    "role": "publisher",
+                    "topic": "/floor/right", 
+                    "args":{}
+                },
+                "left_floor": {   
+                    "pin": "3",
+                    "role": "publisher",
+                    "topic": "/floor/left", 
+                    "args":{}
                 }
+            }, 
+            "args":{
+                "address": "0x48"  
             }
         }
     }
+}
 

@@ -1,5 +1,7 @@
-name: robot-block-experimental 
-type: sw.application
+name: ros-io
+description: >-
+  A hardware abstraction layer for ROS.
+version: 0.0.1
 data:
   applicationConfigVariables:
     - BALENA_HOST_CONFIG_start_x: 1

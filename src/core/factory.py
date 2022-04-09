@@ -1,7 +1,7 @@
 import json, importlib, importlib.machinery, sys, threading, os, rospy 
 
 from core.library import Library, Package
-from core.config import Config, Component
+from core.config import Config, Part
 from core.utils import *
 
 class Subscriber(threading.Thread):
@@ -36,7 +36,6 @@ class Factory():
         self.lib = library
         
         self.conf.pretty_print()
-        self.lib.pretty_print()
         
         self._setup()
 
@@ -65,16 +64,16 @@ class Factory():
 
     def _setup(self):
 
-        for comp in self.conf.get_component():
+        for part in self.conf.get_part():
 
-            pkg = self.lib.get_package(comp.name)
-            pkg_instance = self.import_package(pkg.name, pkg.python, comp.args)
+            pkg = self.lib.get_package(part.library)
+            pkg_instance = self.import_package(pkg.name, pkg.python, part.args)
             msg_instance = self.get_ros_msg(pkg.ros_message)
 
-            if comp.channel_no > 0:
-                for ch in range(0, comp.channel_no):
-                    channel = comp.get_channel(ch)
-                    thread_name = comp.name + "_channel_" + channel.pin
+            if part.multichannel is True:
+                for ch in range(0, part.channel_no):
+                    channel = part.get_channel(ch)
+                    thread_name = part.name + "_channel_" + channel.pin
                     thread_name = thread_name.lower().replace(" ", "_")
 
                     if channel.role == "publisher":
@@ -88,7 +87,7 @@ class Factory():
                         'info': {
                             'name': thread_name,   
                             'info': pkg.info,
-                            'library': comp.library,
+                            'library': part.library,
                             'role': channel.role 
                         }
                     }
@@ -96,21 +95,21 @@ class Factory():
                     worker.start()
             
             else:
-                thread_name = comp.name.lower().replace(" ", "_"),   
+                thread_name = part.name.lower().replace(" ", "_"),   
 
-                if comp.role == "publisher":
-                    worker = Publisher(comp.topic, msg_instance, self.get_callback(pkg_instance, pkg.callback))
+                if part.role == "publisher":
+                    worker = Publisher(part.topic, msg_instance, self.get_callback(pkg_instance, pkg.callback))
 
-                elif comp.role == "subscriber":
-                    worker = Subscriber(comp.topic, msg_instance, self.get_callback(pkg_instance, pkg.callback))
+                elif part.role == "subscriber":
+                    worker = Subscriber(part.topic, msg_instance, self.get_callback(pkg_instance, pkg.callback))
 
                 self.threads[thread_name] = {
                         'thread': worker,
                         'info': {
                             'name': thread_name,
                             'info': pkg.info,
-                            'library': comp.library,
-                            'role': comp.role 
+                            'library': part.library,
+                            'role': part.role 
                         }
                 }
 
