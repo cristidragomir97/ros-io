@@ -15,9 +15,6 @@ schema = {
         },
     },
 
-<<<<<<< Updated upstream
-    "simple_guts" : {
-=======
     "downloads": {
         "type" : "object",
         "properties" : {
@@ -27,7 +24,6 @@ schema = {
     },
 
     "single-channel" : {
->>>>>>> Stashed changes
         "type" : "object",
         "properties": {
                 "role" : {"type": "string"},
@@ -40,11 +36,7 @@ schema = {
         "required": ["role", "topic", "library",  "folder", "address"]
     }, 
 
-<<<<<<< Updated upstream
-    "complex_guts" : {
-=======
     "multi-channel" : {
->>>>>>> Stashed changes
         "type" : "object",
         "properties": {
                 "folder" : {"type": "string"},
@@ -177,11 +169,7 @@ class Config():
                 # CREATE COMPONENT OBJECT
                 part_obj = Part(obj = thing, name = item, multichannel = True)
     
-<<<<<<< Updated upstream
-                if _validate(thing, schema["complex_guts"], item, tabs = 1) is True:
-=======
                 if _validate(thing, schema["multi-channel"], item, tabs = 1) is True:
->>>>>>> Stashed changes
                     ch = thing["channels"]
 
                     for channel in ch:
@@ -195,19 +183,11 @@ class Config():
 
             ## HANDLE SINGLE CHANNEL COMPONENT 
             else:
-<<<<<<< Updated upstream
-                if _validate(thing, schema["simple_guts"], item, tabs = 1) is True:
-=======
                 if _validate(thing, schema["single-channel"], item, tabs = 1) is True:
->>>>>>> Stashed changes
                     ## create compoent here
                     part_obj = Part(obj = thing, name = item, multichannel = False)
                     self.parts.append(part_obj)
                     
-<<<<<<< Updated upstream
-    def get_components(self):
-        return self.components
-=======
     def get_part(self):
         return self.parts
->>>>>>> Stashed changes
+
