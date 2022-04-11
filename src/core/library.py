@@ -44,7 +44,7 @@ class Library():
             file = full_path + '/{}.json'.format(name)
 
             if os.path.isfile(file):
-                self.install_pip(file)
+                self.install_pip(name, file)
                 self.packages[name] = Package(name, file)
 
             else:
@@ -55,29 +55,43 @@ class Library():
                     if name != ".git":
                         json_filename = deeper_folder + '/{}.json'.format(name)
                         self.packages[name] = Package(name, json_filename)
-                        self.install_pip(json_filename)
 
-    def install_pip(self, json_file):
-        with open(json_file) as json_file:
-            data = json.load(json_file)
-            for dep in data["dependencies"]:
-                if dep["type"] == "pip3":
-                    pck = dep["package"]
-    
-                    if not self.is_installed(pck):
-                        subprocess.check_call([sys.executable, "-m", "pip", "install", pck])
+                     
+                        self.install_pip(name, json_filename)
+
+    def install_pip(self, name, json_file):
+
+        print("* installing pip dependencies for {}".format(name))
+        for part in self.config.referenced:
+            if part == name:
+                with open(json_file) as json_file:
+                    data = json.load(json_file)
+                    for dep in data["dependencies"]:
+                        if dep["type"] == "pip3":
+                            pck = dep["package"]
+            
+                            if not self.is_installed(pck):
+                                print("* installing {}".format(pck))
+                                subprocess.check_call([sys.executable, "-m", "pip", "install", pck])
 
     def is_installed(self, name):
         return name in sorted(["%s" % (i.key) for i in pkg_resources.working_set])
 
+ 
+
     def __init__(self, config):
+        print("{} \n ---------------------- \n LIBRARY \n ----------------------- \n {}".format(Fore.GREEN, Fore.RESET))
+        print("{} * cloning repos .. {}".format(Fore.GREEN, Fore.RESET))
+        
         self.packages = {}
 
         self.config = config
+        
         self.clone_repos()
+
+        print("{} * loading packages .. {}".format(Fore.GREEN, Fore.RESET))
         self.load_packages()
 
-        print("{} PACKAGES: \n ---------------------- \n {}".format(Fore.GREEN, Fore.RESET))
         for package in self.packages:
             print(self.packages[package])
 
@@ -86,6 +100,5 @@ class Library():
         return package in self.packages
     
     def get_package(self, package):
-        print(package, self.packages)
         return self.packages[package]
     

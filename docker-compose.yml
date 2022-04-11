@@ -42,6 +42,7 @@ services:
        - UDEV=1
        - ROS_HOSTNAME=ros-io
        - ROS_MASTER_URI=http://ros-core:11311
+       - CONFIG_REPO=https://github.com/cristidragomir97/ep1-rc-car
     volumes:
       - ros-bin:/opt/ros/noetic
     ports:
@@ -50,20 +51,20 @@ services:
     devices:
       - "/dev:/dev"
 
-  arduino-block: 
-      image: cristidragomir97/arduino-block:latest
-      privileged: true
-      environment:
-        - REPO=https://github.com/cristidragomir97/motorhead
-        - SKETCH_FOLDER=/firmware
-        - AVRDUDE_CPU=atmega328p
-        - MONITOR_BAUD=9600
-        - SERIAL_PORT=/dev/ttyUSB0
-        - ARDUINO_FQBN=arduino:avr:pro:cpu=8MHzatmega328
-      devices:
-      - "/dev:/dev"
-      labels:
-        io.balena.features.dbus: '1'
+ # arduino-block: 
+ #     image: cristidragomir97/arduino-block:latest
+ #     privileged: true
+ #     environment:
+ #       - REPO=https://github.com/cristidragomir97/motorhead
+ #       - SKETCH_FOLDER=/firmware
+ #       - AVRDUDE_CPU=atmega328p
+ #       - MONITOR_BAUD=9600
+ #       - SERIAL_PORT=/dev/ttyUSB0
+ #       - ARDUINO_FQBN=arduino:avr:pro:cpu=8MHzatmega328
+ #     devices:
+ #     - "/dev:/dev"
+ #     labels:
+ #       io.balena.features.dbus: '1'
 
 
 

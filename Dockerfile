@@ -8,10 +8,10 @@ COPY src/requirements.txt requirements.txt
 
 # pip install python deps from requirements.txt on the resin.io build server
 RUN pip3 install --upgrade pip && CFLAGS="-fcommon" pip3 install -r requirements.txt 
-RUN pip3 install --extra-index-url https://rospypi.github.io/simple/ rospy
+#RUN pip3 install --extra-index-url https://rospypi.github.io/simple/ rospy
 
 
 COPY . ./
 WORKDIR /usr/deploy/src
 
-CMD . /opt/ros/noetic/setup.sh && python3 main.py --config=config.json
+CMD . /opt/ros/noetic/setup.sh && python3 main.py 

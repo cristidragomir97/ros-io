@@ -131,6 +131,8 @@ class Part():
 class Config():
 
     def __init__(self, path):
+        print("{} \n ----------------------  CONFIG \----------------------- \n {}".format(Fore.GREEN, Fore.RESET))
+        self.referenced = []
         self.parts = []
         self.downloads = []
         with open(path, 'r') as f:
@@ -174,11 +176,11 @@ class Config():
 
                     for channel in ch:
                         if _validate(ch[channel], schema["channel"], channel, tabs = 2) is True:
-
                             # CREATE CHANNEL OBJECT AND ADD TO THE COMPONENT OBJECT
                             channel_obj = Channel(obj = ch[channel], name = channel)
                             part_obj.channels.append(channel_obj)
                 
+                self.referenced.append(part_obj.library)
                 self.parts.append(part_obj)
 
             ## HANDLE SINGLE CHANNEL COMPONENT 
@@ -187,6 +189,7 @@ class Config():
                     ## create compoent here
                     part_obj = Part(obj = thing, name = item, multichannel = False)
                     self.parts.append(part_obj)
+                    self.referenced.append(part_obj.library)
                     
     def get_part(self):
         return self.parts
