@@ -1,0 +1,19 @@
+name: ros-io
+description: >-
+  A hardware abstraction layer for ROS
+version: 0.0.1
+type: sw.application
+assets:
+  repository:
+    type: blob.asset
+    data:
+      url: 'https://github.com/cristidragomir97/ros-io'
+  logo:
+    type: blob.asset
+    data:
+      url: 'https://github.com/cristidragomir97/ros-io/raw/main/assets/icon.png'
+data:
+  defaultDeviceType: raspberrypi3
+  supportedDeviceTypes:
+    - raspberrypi3
+    
