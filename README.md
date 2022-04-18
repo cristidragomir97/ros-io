@@ -39,6 +39,9 @@ Of course, your configuration might vary, but here are a few pointers:
 		volumes:
 			- ros-bin:/opt/ros/noetic
 	```
+	
+--- 
+
 ### 2. config file
 The `config.json` file is conceptually very similar to `docker-compose.yaml`. It defines what parts you are using, how to access them, and how to expose them to ROS. The config file has the following structure:
 
@@ -51,6 +54,8 @@ The `config.json` file is conceptually very similar to `docker-compose.yaml`. It
 }
 ```
 
+---
+
 #### 2.1 Downloads
 By default ros-io doesn't contain any packages, however you can specify multiple sources for those in the `Downloads` section of the config file. 
 ```json
@@ -62,7 +67,7 @@ By default ros-io doesn't contain any packages, however you can specify multiple
 },
 ```
 
-
+--- 
 
 #### 2.2 Parts
 ros-io supports two types of parts:
@@ -149,14 +154,13 @@ The ADS1115 ADC is a great example of a multi-channel part.
 	}
 ```
 
+--- 
 
 ### 3. Parts, packages and the library
 To understand the role of each of these, we first need to define a few terms:
-
-
-**Package** - the code and the configuration file 
-**Library** - the library doesn't really exist anywhere, it's just the collection of packages that gets downloaded for your solution
-**Part** - a part is an instance of a package. ros-io supports two types of parts:
+* **Package** - the code and the configuration file 
+* **Library** - the library doesn't really exist anywhere, it's just the collection of packages that gets downloaded for your solution
+* **Part** - a part is an instance of a package. ros-io supports two types of parts:
 
 
 ### 3.1 Core Packages
@@ -204,7 +208,6 @@ First step is to investigate and analyse the part you are going to write a packa
 ```chan.value, chan.voltage```
 		
 
----
 #### 3.2.2 Pick ROS Message type
 In the case of our ADC, values are integers between (0-4096), so our decision here is pretty simple. Check out  [std_msgs](http://wiki.ros.org/std_msgs) for a list of base message types. 
 For more specific hardware, you might need something  more complex, such as `sensor_msgs.msg.Imu` for, or `geometry_msgs.msg.Twist` for motor controllers. These are usually found in [common_msgs](http://wiki.ros.org/common_msgs).
@@ -222,7 +225,7 @@ def create_msg(value):
 	return  msg
 ```
 
----
+
 
 #### 3.2.3 Write configuration file 
 Package folder must contain a JSON configuration file that defines it's properties, dependencies, ROS message types and callback functions. All fields in this example are mandatory.
@@ -239,7 +242,6 @@ Package folder must contain a JSON configuration file that defines it's properti
     	"ros_message":  ["std_msgs.msg",  "Int32"]
 }
 ```
----
 
 #### 3.2.4 Write package code
 Your package code can be any valid python code, however, some conventions must be respected:
