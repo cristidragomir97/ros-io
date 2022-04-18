@@ -2,15 +2,14 @@
 
 A hardware abstraction layer for modules and chips that are connected to I2C, UART and GPIO interfaces. This reduces friction by eliminating the need to write low-level code, firmware or ROS nodes and replaces it with a config file similar to the way docker-compose works. 
 
---- 
+In a world where ICs, modules and electronics are going trough long waiting times this helps makers prototype much faster, and allows robotics fleet owners the flexiblity to replace the hardware quickl and deploy fleets with mixed hardware configurations.
+
 Here's how this all works:
 * You define your hardware in a configuration file and upload to a git repository
 * ros-io downloads your config file, parses it's contents and installs the proper packages and 3rd party dependencies
 * Package code gets imported into the ros-io code, and worker threads are deployed:
 	* Workers wrap the part object, create ROS messages and map the read/update functions to rospy Subscriber and Publisher objects
 	
---- 
-In a world where ICs, modules and electronics are going trough long waiting times this provides robotics fleet owners the flexiblity to replace the hardware quickly, deploy fleets with mixed hardware configurations, and prototype faster.
 
 
 ## How to use ros-io 
@@ -78,7 +77,7 @@ The following fields are mandatory for any type of part:
 * `package` is the name of the package. 
 * `folder` this is where on the filesystem your package is residing. That should usually be the path you have defined in the `downloads` section plus the package name. 
 * `address` tells ros-io how to physically talk to your device.
-* Everything in `args` will be unpacked and directly passed to the constructor of your part as arguments. This is how you can configure the package itself. (
+* Everything in `args` will be unpacked and directly passed to the constructor of your part as arguments. This is how you can configure the package itself. 
 
 ##### 2.2.1 Simple Part Example
 A good example of a simple part is the [motorhead](https://github.com/cristidragomir97/motorhead) motor-driver. What defines a simple parts, is that they can only expose a single `topic` and have a single `role`
