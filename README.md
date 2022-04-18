@@ -8,9 +8,7 @@ Here's how this all works:
 * ros-io downloads your config file, parses it's contents and installs the proper packages and 3rd party dependencies
 * Package code gets imported into the ros-io code, and worker threads are deployed:
 	* Workers wrap the part object, create ROS messages and map the read/update functions to rospy Subscriber and Publisher objects
-
-![](https://i.ibb.co/tc8vx7T/grid.png)
-
+	
 --- 
 In a world where ICs, modules and electronics are going trough long waiting times this provides robotics fleet owners the flexiblity to replace the hardware quickly, deploy fleets with mixed hardware configurations, and prototype faster.
 
@@ -20,16 +18,16 @@ In a world where ICs, modules and electronics are going trough long waiting time
 ### 1. Add to ros-io docker-compose.yaml
 ```yaml
 ros-io:
-	privileged: true 
-	image: cristidragomir97/ros-io
-	environment:
-		- ROS_HOSTNAME=ros-io 
-		- ROS_MASTER_URI=http://ros-core:11311
-		- CONFIG_REPO=https://github.com/cristidragomir97/ep1-rc-car
-	volumes:
-		- ros-bin:/opt/ros/noetic
-	devices:
-		- "/dev:/dev"
+  privileged: true 
+  image: cristidragomir97/ros-io
+  environment:
+    - ROS_HOSTNAME=ros-io 
+    - ROS_MASTER_URI=http://ros-core:11311
+    - CONFIG_REPO=https://github.com/cristidragomir97/ep1-rc-car
+  volumes:
+    - ros-bin:/opt/ros/noetic
+  devices:
+    - "/dev:/dev"
 ```
 
 Of course, your configuration might vary, but here are a few pointers:
