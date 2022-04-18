@@ -34,10 +34,10 @@ Of course, your configuration might vary, but here are a few pointers:
 * `ROS_HOSTNAME ` has to match the service name (more info on ROS, docker and networking here)
 * `CONFIG_REPO` is where ros-io can find your configuration file. It expects to find a file called `config.json` at the root of your repository. 
 * ros-io doesn't contain any ROS binaries, these are loaded from the ros-core service using a volume share:
-	```yaml 
-		volumes:
-			- ros-bin:/opt/ros/noetic
-	```
+```yaml 
+volumes:
+  - ros-bin:/opt/ros/noetic
+```
 	
 --- 
 
