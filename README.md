@@ -2,11 +2,11 @@
 
 A hardware abstraction layer for modules and chips that are connected to I2C, UART and GPIO interfaces. This reduces friction by eliminating the need to write low-level code, firmware or ROS nodes and replaces it with a config file similar to the way docker-compose works. 
 
-In a world where ICs, modules and electronics are going trough long waiting times this helps makers prototype much faster, and allows robotics fleet owners the flexiblity to replace the hardware quickl and deploy fleets with mixed hardware configurations.
+In a world where ICs, modules and electronics are going trough long waiting times this helps makers prototype much faster, and allows robotics fleet owners the flexiblity to replace the hardware quickly and deploy fleets with mixed hardware configurations.
 
 Here's how this all works:
 * You define your hardware in a configuration file and upload to a git repository
-* ros-io downloads your config file, parses it's contents and installs the proper packages and 3rd party dependencies
+* ros-io downloads your config file, parses its contents and installs the proper packages and 3rd party dependencies
 * Package code gets imported into the ros-io code, and worker threads are deployed:
 	* Workers wrap the part object, create ROS messages and map the read/update functions to rospy Subscriber and Publisher objects
 	
@@ -31,7 +31,7 @@ ros-io:
 
 Of course, your configuration might vary, but here are a few pointers:
 * `privileged: true` is required for access to hardware 
-* `ROS_HOSTNAME ` has to match the service name (more info on ROS, docker and networking here)
+* `ROS_HOSTNAME ` has to match the service name more info on ROS, docker and networking [here](https://github.com/cristidragomir97/robotics-images)
 * `CONFIG_REPO` is where ros-io can find your configuration file. It expects to find a file called `config.json` at the root of your repository. 
 * ros-io doesn't contain any ROS binaries, these are loaded from the ros-core service using a volume share:
 ```yaml 
