@@ -75,7 +75,7 @@ ros-io supports two types of parts:
 
 The following fields are mandatory for any type of part:
 * `package` is the name of the package. 
-* `folder` this is where on the filesystem your package is residing. That should usually be the path you have defined in the `downloads` section plus the package name. 
+* `folder` this is where on the filesystem your package is residing. That should usually be the path you have defined in the downloads section plus the package name. 
 * `address` tells ros-io how to physically talk to your device.
 * Everything in `args` will be unpacked and directly passed to the constructor of your part as arguments. This is how you can configure the package itself. 
 
