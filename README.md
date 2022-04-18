@@ -48,12 +48,8 @@ The `config.json` file is conceptually very similar to `docker-compose.yaml`. It
 {
 	"name": "",
 	"desc": "",
-	"downloads": {
-		...
-	}, 
-	"parts": {
-		...
-	}, 
+	"downloads": {}, 
+	"parts": {}, 
 }
 ```
 
